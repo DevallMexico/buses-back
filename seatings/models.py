@@ -1,6 +1,6 @@
 from django.db import models
 from users.models import TimeStampedModel
-from travels.models import Travels
+from travels.models import TravelsSchedule
 from drivers.models import PersonalInformation
 
 # Create your models here.
@@ -11,8 +11,14 @@ class Seatings(TimeStampedModel, PersonalInformation):
         verbose_name = 'Asiento'
         verbose_name_plural = 'Asientos'
 
-    travel = models.ForeignKey(Travels, on_delete=models.CASCADE, related_name="seatings", verbose_name='Trayecto')
+    travel_schedule = models.ForeignKey(
+        TravelsSchedule,
+        on_delete=models.SET_NULL,
+        related_name="seatings",
+        verbose_name='Horario de trayecto',
+        null=True
+    )
     seat_number = models.PositiveIntegerField(default=10, verbose_name='Número de asiento')
 
     def __str__(self):
-        return "{} - {}".format(self.travel, self.seat_number)
+        return "{} - {}".format(self.travel_schedule, self.seat_number)
