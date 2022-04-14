@@ -59,7 +59,7 @@ class TravelScheduleSerializer(serializers.ModelSerializer):
         if start_date <= today:
             raise serializers.ValidationError("La hora y día de salida no puede ser menor a la fecha y día actual")
         if end_date <= start_date:
-            raise serializers.ValidationError("La hora y día de llegada no puede ser menor a la fecha y dáa de salida")
+            raise serializers.ValidationError("La hora y día de llegada no puede ser menor a la fecha y día de salida")
         return data
 
 

@@ -13,5 +13,7 @@ class SeatingsSerializer(serializers.ModelSerializer):
         travel = data["travel_schedule"]
         seats_count = travel.seatings.filter(seat_number=seat_number).count()
         if seats_count > 0:
-            raise serializers.ValidationError("Este asiento ya no está disponible.")
+            raise serializers.ValidationError(
+                "El asiento #{} ya no está disponible por favor escoge otro.".format(seat_number)
+            )
         return data

@@ -1,13 +1,12 @@
 from seatings.models import Seatings
-from rest_framework import serializers
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .serializers import SeatingsSerializer
-from django.shortcuts import get_object_or_404
 from .filters import SeatingsFilter
-from django.db import transaction
+from django.db import transaction, IntegrityError
+from rest_framework.exceptions import ValidationError
 
 
 class SeatingsViewSet(viewsets.ModelViewSet):
@@ -19,13 +18,21 @@ class SeatingsViewSet(viewsets.ModelViewSet):
 
     @action(methods=["post"], detail=False)
     def multiple(self, request):
+        seat_number = 0
         try:
-            data = request.data
-            for seat in data["seatings"]:
-                seat["travel_schedule"] = data["travel_schedule"]
-                seatings_serializer = SeatingsSerializer(data=seat)
-                if seatings_serializer.is_valid():
-                    seatings_serializer.save()
+            with transaction.atomic():
+                data = request.data
+                for seat in data["seatings"]:
+                    seat["travel_schedule"] = data["travel_schedule"]
+                    seat_number = seat["seat_number"]
+                    seatings_serializer = SeatingsSerializer(data=seat)
+                    if seatings_serializer.is_valid():
+                        seatings_serializer.save()
+                    else:
+                        raise ValidationError
             return Response({"status": True})
-        except Exception as error:
-            return Response({"status": False, "message": error})
+        except ValidationError:
+            return Response({
+                "status": False,
+                "message": "El asiento #{} ya no está disponible por favor escoge otro.".format(seat_number),
+            })

@@ -1,10 +1,7 @@
 from travels.models import Travels, TravelsSchedule
 from rest_framework import status, permissions, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.decorators import action
-from rest_framework.response import Response
 from .serializers import TravelsSerializer, ListTravelScheduleSerializer, TravelScheduleSerializer
-from django.shortcuts import get_object_or_404
 from .filters import TravelsScheduleFilter
 
 
