@@ -11,7 +11,7 @@
 
 # Prerequisites
 
-- Docker Desktop 4.6.1 (includes docker && docker-compose)
+- [Docker Desktop 4.6.1](https://www.docker.com/products/docker-desktop/) (includes docker && docker-compose)
 
 # Build Setup
 
