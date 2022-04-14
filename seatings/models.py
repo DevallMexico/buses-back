@@ -13,7 +13,7 @@ class Seatings(TimeStampedModel, PersonalInformation):
 
     travel_schedule = models.ForeignKey(
         TravelsSchedule,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name="seatings",
         verbose_name='Horario de trayecto',
         null=True

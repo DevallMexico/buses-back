@@ -1,4 +1,5 @@
 from seatings.models import Seatings
+from rest_framework import serializers
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, permissions, viewsets
 from rest_framework.decorators import action
@@ -6,6 +7,7 @@ from rest_framework.response import Response
 from .serializers import SeatingsSerializer
 from django.shortcuts import get_object_or_404
 from .filters import SeatingsFilter
+from django.db import transaction
 
 
 class SeatingsViewSet(viewsets.ModelViewSet):

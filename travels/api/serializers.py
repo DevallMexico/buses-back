@@ -4,15 +4,29 @@ from rest_framework import serializers
 from travels.models import Travels, TravelsSchedule
 from bus.api.serializers import BusesSerializer
 from drivers.api.serializers import DriversSerializer
+from django.db.models import Count, Q, F, ExpressionWrapper, FloatField, Sum, Case, Value, When
+from django.db.models.functions import Coalesce
 
 utc = pytz.UTC
 
 
 class TravelsSerializer(serializers.ModelSerializer):
+    avg_passengers_percentage = serializers.SerializerMethodField()
 
     class Meta:
         model = Travels
         exclude = ()
+
+    @staticmethod
+    def get_avg_passengers_percentage(obj):
+        queryset = obj.travel_schedules.all()
+        total_capacity = queryset.aggregate(
+            total_capacity=Coalesce(Sum("bus__capacity"), 0)
+        )["total_capacity"]
+        total_seats = queryset.aggregate(total_seats=Count("seatings__pk"))["total_seats"]
+        if total_capacity > 0:
+            return (total_seats * 100) / total_capacity
+        return 0
 
 
 class ListTravelScheduleSerializer(serializers.ModelSerializer):

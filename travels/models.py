@@ -26,12 +26,12 @@ class TravelsSchedule(TimeStampedModel):
     travel = models.ForeignKey(
         Travels,
         on_delete=models.CASCADE,
-        related_name="travel",
+        related_name="travel_schedules",
         verbose_name='Trayecto',
         null=True
     )
-    driver = models.ForeignKey(Drivers, on_delete=models.CASCADE, related_name="travels", verbose_name='Conductor')
-    bus = models.ForeignKey(Buses, on_delete=models.CASCADE, related_name="bus_travels", verbose_name='Autobus')
+    driver = models.ForeignKey(Drivers, on_delete=models.PROTECT, related_name="travels", verbose_name='Conductor')
+    bus = models.ForeignKey(Buses, on_delete=models.PROTECT, related_name="bus_travels", verbose_name='Autobus')
     start_date = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
     end_date = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
 

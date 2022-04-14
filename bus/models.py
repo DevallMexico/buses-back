@@ -13,6 +13,7 @@ class Buses(TimeStampedModel):
     model = models.CharField(max_length=50, verbose_name='Modelo')
     year = models.PositiveIntegerField(verbose_name='Año')
     capacity = models.PositiveIntegerField(default=10, verbose_name='Capacidad')
+    number = models.PositiveIntegerField(default=10, verbose_name='Numero')
 
     def __str__(self):
         return "{} - {}".format(self.brand, self.model)
